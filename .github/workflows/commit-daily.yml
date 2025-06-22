@@ -2,11 +2,11 @@ name: Daily Commit Workflow
 
 on:
   schedule:
-    - cron: '5 6 * * *'  # Runs daily at 06:05 UTC
-  workflow_dispatch:     # Optional: allows manual trigger
+    - cron: '5 6 * * *' # Runs daily at 06:05 UTC
+  workflow_dispatch: # Optional manual trigger
 
 jobs:
-  commit:
+  daily-commit:
     name: Daily Commit by 23f1000504@ds.study.iitm.ac.in
     runs-on: ubuntu-latest
 
@@ -16,17 +16,17 @@ jobs:
 
       - name: Make trivial change
         run: |
-          echo "Updated on $(date)" >> daily-log.txt
+          echo "Automated daily update: $(date -u)" >> daily-log.txt
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "23f1000504@ds.study.iitm.ac.in"
 
       - name: Commit and Push
         run: |
           git add daily-log.txt
-          git commit -m "Automated daily update: $(date -u '+%Y-%m-%d %H:%M:%S')"
+          git commit -m "Automated daily update: $(date -u)" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
